@@ -60,7 +60,8 @@ router.post("/signup", async (req, res, next) => {
         });
         const created = await newUser.save();
         console.log(created);
-        // const{hashedPassword,...restUserInfo}=created;
+        const createdUser=created.toObject()
+        const { hashedPassword, ...restUserInfo } = createdUser;
         res.status(201).json(restUserInfo);
     } catch (error) {
         next(error);
@@ -108,4 +109,26 @@ router.post("/signin", async (req, res, next) => {
     }
 });
 
+router.put('/',bearerAuth, async(req,res,next)=>{
+    const updatedInfo = req.body;
+    let hashedPassword1;
+    if (updatedInfo.password) {
+        hashedPassword1 = await bcrypt.hash(req.body.password, 10);
+    }
+    const currentUser = await User.findById(req.user._id);
+    const updatedUser = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            name: updatedInfo.name || UsecurrentUserr.name,
+            email: updatedInfo.email || currentUser.email,
+            phone_number: updatedInfo.phone_number || currentUser.phone_number,
+            hashedPassword: hashedPassword1 || currentUser.hashedPassword,
+            country: updatedInfo.country || currentUser.country,
+            city: updatedInfo.city || currentUser.city,
+            street: updatedInfo.street || currentUser.street,
+            appartment: updatedInfo.appartment || currentUser.appartment,
+        },
+        { new: true }
+    );
+})
 module.exports = router;

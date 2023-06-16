@@ -1,16 +1,17 @@
 const mongoose=require('mongoose');
 
 const categorySchema = mongoose.Schema({
-    name:{
-        type:String,
-        required:true
+    name: {
+        type: String,
+        unique: true,
+        required: true,
     },
-    icon:{
-        type:String
+    icon: {
+        type: String,
     },
-    color:{
-        type:String
-    }
+    color: {
+        type: String,
+    },
 });
 // we used this to define a virtual property called "id" to save th id without _id which is the fefault naming by mongoose
 // so we can use the id property because some times the underscore before the _id maybe cause some errors

@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-router.get("/catById/:id",bearerAuth ,async (req, res, next) => {
+router.get("/byId/:id",bearerAuth ,async (req, res, next) => {
     try {
         const category = await Category.findById(req.params.id);
         console.log(category.id);

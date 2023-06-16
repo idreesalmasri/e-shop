@@ -3,8 +3,6 @@ const { Order } = require("../models/order");
 const { OrderItem } = require("../models/orderItems");
 const express = require("express");
 const { bearerAuth, adminCheck } = require("../auth_middleware/bearerAuth");
-const { Category } = require("../models/category");
-const { populate } = require("../models/product");
 const Product = require("../models/product");
 const router = express.Router();
 router.get("/", bearerAuth, async (req, res, next) => {
@@ -103,7 +101,7 @@ router.get("/number", bearerAuth, async (req, res, next) => {
         next(error);
     }
 });
-router.put("/update/:id", async (req, res, next) => {
+router.put("/update/:id",bearerAuth ,adminCheck,async (req, res, next) => {
     try {
         const updated = await Order.findByIdAndUpdate(
             req.params.id,
@@ -119,7 +117,7 @@ router.put("/update/:id", async (req, res, next) => {
     }
 });
 
-router.delete("/byId/:id", bearerAuth, async (req, res, next) => {
+router.delete("/byId/:id", bearerAuth,adminCheck, async (req, res, next) => {
     try {
         const order = await Order.findByIdAndRemove({ _id: req.params.id });
         if (!order) return res.status(400).send("pad request");
